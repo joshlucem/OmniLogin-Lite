@@ -21,7 +21,7 @@ public class SetWorldSpawnCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.getMessages().getString("admin-player-only", "Solo jugadores pueden usar este comando."));
+            sendMiniMessage(sender, plugin.getMessages().getString("admin-player-only", "Solo jugadores pueden usar este comando."));
             return true;
         }
         Player player = (Player) sender;
@@ -35,7 +35,22 @@ public class SetWorldSpawnCommand implements CommandExecutor {
         config.set("spawn.yaw", loc.getYaw());
         config.set("spawn.pitch", loc.getPitch());
         plugin.saveConfig();
-    sender.sendMessage(plugin.getMessages().getString("admin-setworldspawn-success", "§aSpawn del mundo configurado correctamente."));
+    sendMiniMessage(sender, plugin.getMessages().getString("admin-setworldspawn-success", "§aSpawn del mundo configurado correctamente."));
         return true;
+    }
+
+    private void sendMiniMessage(CommandSender sender, String msg) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            String parsedMsg = plugin.parsePlaceholders(player, msg);
+            try {
+                player.getClass().getMethod("sendMessage", net.kyori.adventure.text.Component.class)
+                        .invoke(player, plugin.getMiniMessage().deserialize(parsedMsg));
+            } catch (Exception e) {
+                player.sendMessage(parsedMsg);
+            }
+        } else {
+            sender.sendMessage(msg.replaceAll("<[^>]+>", "")); // Remove MiniMessage tags for console
+        }
     }
 }

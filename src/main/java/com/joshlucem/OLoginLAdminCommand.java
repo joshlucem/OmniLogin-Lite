@@ -23,14 +23,14 @@ public class OLoginLAdminCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!sender.hasPermission("omnilogin.admin")) {
-			sender.sendMessage(plugin.getMessages().getString("admin-no-permission", "§cNo tienes permisos para usar este comando."));
+			sendMiniMessage(sender, plugin.getMessages().getString("admin-no-permission", "§cNo tienes permisos para usar este comando."));
 			return true;
 		}
 		if (args.length == 0) {
 			String helpMsg = plugin.getMessages().getString("help-admin",
 				"§eComandos disponibles:\n§6/ologinl setworldspawn §7- Establece el spawn actual\n§6/ologinl listusers §7- Lista todos los usuarios registrados\n§6/ologinl deleteuser <usuario> §7- Elimina un usuario\n§6/ologinl info §7- Muestra información del plugin\n§6/ologinl update §7- Verifica si hay actualizaciones\n§6/ologinl help §7- Muestra esta ayuda");
 			for (String line : helpMsg.split("\n")) {
-				sender.sendMessage(line);
+				sendMiniMessage(sender, line);
 			}
 			return true;
 		}
@@ -38,7 +38,7 @@ public class OLoginLAdminCommand implements CommandExecutor {
 		switch (sub) {
 			case "setworldspawn":
 				if (!(sender instanceof Player)) {
-					sender.sendMessage(plugin.getMessages().getString("admin-player-only", "Solo jugadores pueden usar este comando."));
+					sendMiniMessage(sender, plugin.getMessages().getString("admin-player-only", "Solo jugadores pueden usar este comando."));
 					return true;
 				}
 				Player player = (Player) sender;
@@ -52,52 +52,67 @@ public class OLoginLAdminCommand implements CommandExecutor {
 				config.set("spawn-location.yaw", loc.getYaw());
 				config.set("spawn-location.pitch", loc.getPitch());
 				plugin.saveConfig();
-				sender.sendMessage(plugin.getMessages().getString("admin-setworldspawn-success", "§aSpawn del mundo configurado correctamente."));
+				sendMiniMessage(sender, plugin.getMessages().getString("admin-setworldspawn-success", "§aSpawn del mundo configurado correctamente."));
 				break;
 			case "listusers":
-				sender.sendMessage(plugin.getMessages().getString("admin-listusers-title", "§eUsuarios registrados:"));
+				sendMiniMessage(sender, plugin.getMessages().getString("admin-listusers-title", "§eUsuarios registrados:"));
 				for (String user : authService.getUsernames()) {
-					sender.sendMessage(plugin.getMessages().getString("admin-listusers-entry", "§7- {user}").replace("{user}", user));
+					sendMiniMessage(sender, plugin.getMessages().getString("admin-listusers-entry", "§7- {user}").replace("{user}", user));
 				}
 				break;
 			case "deleteuser":
 				if (args.length != 2) {
-					sender.sendMessage(plugin.getMessages().getString("admin-deleteuser-usage", "§eUso: /ologinl deleteuser <usuario>"));
+					sendMiniMessage(sender, plugin.getMessages().getString("admin-deleteuser-usage", "§eUso: /ologinl deleteuser <usuario>"));
 					return true;
 				}
 				String username = args[1];
 				if (authService.deleteUser(username)) {
-					sender.sendMessage(plugin.getMessages().getString("admin-deleteuser-success", "§aUsuario eliminado: {user}").replace("{user}", username));
+					sendMiniMessage(sender, plugin.getMessages().getString("admin-deleteuser-success", "§aUsuario eliminado: {user}").replace("{user}", username));
 				} else {
-					sender.sendMessage(plugin.getMessages().getString("admin-deleteuser-fail", "§cNo se encontró el usuario: {user}").replace("{user}", username));
+					sendMiniMessage(sender, plugin.getMessages().getString("admin-deleteuser-fail", "§cNo se encontró el usuario: {user}").replace("{user}", username));
 				}
 				break;
 			case "info":
-				sender.sendMessage("§bOmniLogin-Lite");
-				sender.sendMessage("§7Autor: JoshLucem (@joshlucem)");
-				sender.sendMessage("§7Versión: " + plugin.getDescription().getVersion());
+				sendMiniMessage(sender, "<aqua><bold>OmniLogin-Lite</bold></aqua>");
+				sendMiniMessage(sender, "<gray>Autor: JoshLucem (@joshlucem)</gray>");
+				sendMiniMessage(sender, "<gray>Versión: " + plugin.getDescription().getVersion() + "</gray>");
 				break;
 			case "update":
 				// Simulación de verificación de actualización
 				String currentVersion = plugin.getDescription().getVersion();
 				String latestVersion = "0.0.2-ALFA"; // Aquí podrías consultar una API externa
 				if (currentVersion.equals(latestVersion)) {
-					sender.sendMessage(plugin.getMessages().getString("admin-update-none", "§aNo hay actualizaciones pendientes. Versión actual: {version}").replace("{version}", currentVersion));
+					sendMiniMessage(sender, plugin.getMessages().getString("admin-update-none", "§aNo hay actualizaciones pendientes. Versión actual: {version}").replace("{version}", currentVersion));
 				} else {
-					sender.sendMessage(plugin.getMessages().getString("admin-update-new", "§eHay una nueva versión disponible: {version}").replace("{version}", latestVersion));
+					sendMiniMessage(sender, plugin.getMessages().getString("admin-update-new", "§eHay una nueva versión disponible: {version}").replace("{version}", latestVersion));
 				}
 				break;
 			case "help":
 								String helpMsg = plugin.getMessages().getString("help-admin",
 									"§eComandos disponibles:\n§6/ologinl setworldspawn §7- Establece el spawn actual\n§6/ologinl listusers §7- Lista todos los usuarios registrados\n§6/ologinl deleteuser <usuario> §7- Elimina un usuario\n§6/ologinl info §7- Muestra información del plugin\n§6/ologinl debug §7- Muestra la configuración actual\n§6/ologinl help §7- Muestra esta ayuda");
 								for (String line : helpMsg.split("\n")) {
-									sender.sendMessage(line);
+									sendMiniMessage(sender, line);
 								}
 				break;
 			default:
-				sender.sendMessage(plugin.getMessages().getString("admin-unknown-subcommand", "§eSubcomando desconocido. Usa: /ologinl help"));
-				break;
+				sendMiniMessage(sender, plugin.getMessages().getString("admin-unknown-subcommand", "§eSubcomando desconocido. Usa: /ologinl help"));
+						break;
+				}
+				return true;
+			}
+
+			private void sendMiniMessage(CommandSender sender, String msg) {
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					String parsedMsg = plugin.parsePlaceholders(player, msg);
+					try {
+						player.getClass().getMethod("sendMessage", net.kyori.adventure.text.Component.class)
+								.invoke(player, plugin.getMiniMessage().deserialize(parsedMsg));
+					} catch (Exception e) {
+						player.sendMessage(parsedMsg);
+					}
+				} else {
+					sender.sendMessage(msg.replaceAll("<[^>]+>", "")); // Remove MiniMessage tags for console
+				}
+			}
 		}
-		return true;
-	}
-}

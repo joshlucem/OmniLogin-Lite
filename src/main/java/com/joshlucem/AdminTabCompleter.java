@@ -11,10 +11,22 @@ import java.util.stream.Collectors;
 public class AdminTabCompleter implements TabCompleter {
 
     private final OmniLoginLite plugin;
-    private static final List<String> SUBCOMMANDS = Arrays.asList("setworldspawn", "listusers", "deleteuser", "info", "update", "help");
+    private final List<String> subcommands;
+
+    private List<String> loadSubcommands() {
+        List<String> keys = Arrays.asList("setworldspawn", "listusers", "deleteuser", "info", "update", "help");
+        List<String> result = new ArrayList<>();
+        for (String key : keys) {
+            String msgKey = "admin-tab-" + key;
+            String custom = plugin.getMessages().getString(msgKey);
+            result.add(custom != null && !custom.isEmpty() ? custom : key);
+        }
+        return result;
+    }
 
     public AdminTabCompleter(OmniLoginLite plugin) {
         this.plugin = plugin;
+        this.subcommands = loadSubcommands();
     }
 
     @Override
@@ -23,11 +35,11 @@ public class AdminTabCompleter implements TabCompleter {
             return new ArrayList<>();
         }
 
-        if (args.length == 1) {
-            return SUBCOMMANDS.stream()
-                    .filter(s -> s.startsWith(args[0].toLowerCase()))
-                    .collect(Collectors.toList());
-        }
+    if (args.length == 1) {
+        return subcommands.stream()
+            .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase()))
+            .collect(Collectors.toList());
+    }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("deleteuser")) {
             return plugin.getAuthService().getUsernames().stream()

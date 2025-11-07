@@ -1,14 +1,15 @@
-
 package com.joshlucem;
-import java.io.InputStreamReader;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import java.io.InputStreamReader;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.entity.Player;
-import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,6 +22,11 @@ import java.util.HashMap;
  * Plugin de autenticación simple y seguro para Java 21.
  */
 public class OmniLoginLite extends JavaPlugin {
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+
+    public MiniMessage getMiniMessage() {
+        return miniMessage;
+    }
     // Contadores separados para login y registro
     private final Map<String, Integer> loginWaitCounter = new HashMap<>();
     private final Map<String, Integer> registerWaitCounter = new HashMap<>();
@@ -34,7 +40,7 @@ public class OmniLoginLite extends JavaPlugin {
                 Class<?> clazz = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
                 java.lang.reflect.Method method = clazz.getMethod("setPlaceholders", Player.class, String.class);
                 Object result = method.invoke(null, player, message);
-                return (String) result;
+                message = (String) result;
             } catch (Exception e) {
                 getLogger().warning("Error procesando PlaceholderAPI: " + e.getMessage());
             }
@@ -94,12 +100,14 @@ public class OmniLoginLite extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerBlockerListener(this), this);
         getCommand("ologinl").setExecutor(new OLoginLAdminCommand(authService, this));
         getCommand("ologinl").setTabCompleter(new AdminTabCompleter(this));
-        getLogger().info("OmniLogin-Lite habilitado.");
+    getLogger().info("[OmniLogin-Lite] Plugin activado ✅ | Versión: " + getDescription().getVersion());
+    getLogger().info("[OmniLogin-Lite] Autor: JoshLucem | GitHub: joshlucem/OmniLogin-Lite");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("OmniLogin-Lite deshabilitado.");
+    getLogger().info("[OmniLogin-Lite] Plugin desactivado ❌ | Versión: " + getDescription().getVersion());
+    getLogger().info("[OmniLogin-Lite] ¡Gracias por usar OmniLogin-Lite!");
     }
 
     public AuthService getAuthService() {
@@ -128,13 +136,6 @@ public class OmniLoginLite extends JavaPlugin {
             Player player = event.getPlayer();
             if (!plugin.getAuthService().isLoggedIn(player.getName())) {
                 event.setCancelled(true);
-                String msg;
-                if (plugin.getAuthService().isRegistered(player.getName())) {
-                    msg = plugin.getMessages().getString("reminder-login-message", "Recuerda iniciar sesión para jugar.");
-                } else {
-                    msg = plugin.getMessages().getString("reminder-register-message", "Recuerda registrarte para jugar.");
-                }
-                player.sendMessage(plugin.parsePlaceholders(player, msg));
             }
         }
         @EventHandler
@@ -142,16 +143,12 @@ public class OmniLoginLite extends JavaPlugin {
             Player player = event.getPlayer();
             if (!plugin.getAuthService().isLoggedIn(player.getName())) {
                 event.setCancelled(true);
-                String msg = plugin.getMessages().getString("need-login", "Debes iniciar sesión o registrarte para jugar.");
-                player.sendMessage(plugin.parsePlaceholders(player, msg));
             }
         }
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
             Player player = event.getPlayer();
             if (!plugin.getAuthService().isLoggedIn(player.getName())) {
-                String msg = plugin.getMessages().getString("need-login", "Debes iniciar sesión o registrarte para jugar.");
-                player.sendMessage(plugin.parsePlaceholders(player, msg));
                 int maxWaitLogin = plugin.getPluginConfig().getInt("visual-experience.max-wait-login", 45);
                 int maxWaitRegister = plugin.getPluginConfig().getInt("visual-experience.max-wait-register", 45);
                 plugin.loginWaitCounter.put(player.getName(), maxWaitLogin);
@@ -173,35 +170,52 @@ public class OmniLoginLite extends JavaPlugin {
                     return;
                 }
 
-                int timeLeftLogin = plugin.loginWaitCounter.getOrDefault(playerName, maxWaitLogin);
-                int timeLeftRegister = plugin.registerWaitCounter.getOrDefault(playerName, maxWaitRegister);
-                int timeLeft = Math.max(timeLeftLogin, timeLeftRegister);
-                int titleCountdownStart = plugin.getPluginConfig().getInt("visual-experience.title-countdown-start", 10);
+                boolean isRegistered = plugin.getAuthService().isRegistered(playerName);
+                int timeLeft;
+                if (isRegistered) {
+                    timeLeft = plugin.loginWaitCounter.getOrDefault(playerName, maxWaitLogin);
+                } else {
+                    timeLeft = plugin.registerWaitCounter.getOrDefault(playerName, maxWaitRegister);
+                }
 
                 if (timeLeft <= 0) {
-                    player.kickPlayer(plugin.getMessages().getString("kick-message", "Tiempo de espera agotado. Debes registrarte o iniciar sesión."));
+                    String kickMsg = plugin.getMessages().getString("kick-message", "Tiempo de espera agotado. Debes registrarte o iniciar sesión.");
+                    try {
+                        player.getClass().getMethod("kick", net.kyori.adventure.text.Component.class)
+                            .invoke(player, plugin.getMiniMessage().deserialize(kickMsg));
+                    } catch (Exception e) {
+                        player.kickPlayer(kickMsg);
+                    }
                     plugin.loginWaitCounter.remove(playerName);
                     plugin.registerWaitCounter.remove(playerName);
                     return;
                 }
 
-                if (timeLeft <= titleCountdownStart) {
-                    String counterMsg;
-                    String subtitleMsg;
-                    if (timeLeftLogin >= timeLeftRegister) {
-                        counterMsg = plugin.getMessages().getString("counter-login.title", "Login: {time}s").replace("{time}", String.valueOf(timeLeft));
-                        subtitleMsg = plugin.getMessages().getString("counter-login.subtitle", "Usa /login para entrar");
-                    } else {
-                        counterMsg = plugin.getMessages().getString("counter-register.title", "Registro: {time}s").replace("{time}", String.valueOf(timeLeft));
-                        subtitleMsg = plugin.getMessages().getString("counter-register.subtitle", "Usa /register para crear tu cuenta");
-                    }
-                    player.sendTitle(plugin.parsePlaceholders(player, counterMsg), plugin.parsePlaceholders(player, subtitleMsg), 0, 30, 10);
-                }
-                
                 player.setLevel(timeLeft);
-
-                plugin.loginWaitCounter.put(playerName, timeLeftLogin - 1);
-                plugin.registerWaitCounter.put(playerName, timeLeftRegister - 1);
+                // Solo enviar recordatorio cada 5 segundos
+                if (timeLeft % 5 == 0) {
+                    String reminder;
+                    if (isRegistered) {
+                        reminder = plugin.getMessages().getString("reminder-login", "<yellow>Recuerda: debes iniciar sesión para jugar.</yellow>");
+                    } else {
+                        reminder = plugin.getMessages().getString("reminder-register", "<yellow>Recuerda: debes registrarte para jugar.</yellow>");
+                    }
+                    Component component = plugin.getMiniMessage().deserialize(reminder);
+                    // Enviar correctamente el mensaje según API disponible
+                    try {
+                        // Paper API: Player#sendMessage(Component)
+                        player.getClass().getMethod("sendMessage", Component.class).invoke(player, component);
+                    } catch (Exception e) {
+                        // Fallback: enviar como string plano si no está disponible
+                        player.sendMessage(reminder);
+                    }
+                }
+                // Decrementar solo el contador relevante
+                if (isRegistered) {
+                    plugin.loginWaitCounter.put(playerName, timeLeft - 1);
+                } else {
+                    plugin.registerWaitCounter.put(playerName, timeLeft - 1);
+                }
             }, 0L, 20L);
         }
     }

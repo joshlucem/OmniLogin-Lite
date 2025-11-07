@@ -1,56 +1,67 @@
 # ========================================
-#       CONFIGURACIÓN DE AUTENTICACIÓN
+#   CONFIGURACIÓN DE AUTENTICACIÓN
 # ========================================
-# Define los campos requeridos para el registro y el inicio de sesión.
-# Variables disponibles: <user>, <password>, <repeatpassword>, <code>.
-# Usa "none" para deshabilitar un campo. Solo se permiten dos campos.
-
+# Define los campos requeridos para registro y login.
+# <password>: Solicita la contraseña del jugador (dato secreto, cifrado).
+# <code>: Solicita un código adicional (debe ser numérico, longitud configurable).
+# none: Si se usa "none", ese campo no se solicita ni requiere.
+# Ejemplo:
+#   first-requirement: <password>
+#   second-requirement: <code>
+#   => El comando será /register <contraseña> <código>
+# Si usas "none" en second-requirement:
+#   first-requirement: <password>
+#   second-requirement: none
+#   => El comando será /register <contraseña>
+# code-length: Longitud exacta requerida para el código (por defecto 4, universal para login y registro).
 authentication:
-  # Método de registro
+  password-security: medium         # Nivel de seguridad de la contraseña: simple, medium, hard
+  # Valores permitidos:
+  #   simple: Permite contraseñas sencillas (mínimo 4 caracteres)
+  #   medium: Requiere letras y números (mínimo 6 caracteres)
+  #   hard: Requiere letras, números y símbolos (mínimo 8 caracteres)
   register:
-    first-requirement: <password>
-    second-requirement: <code>
-
-  # Método de inicio de sesión
+    first-requirement: <password>   # Campo obligatorio para el registro, siempre debe ser la contraseña del jugador.
+    second-requirement: <code>      # Campo adicional, puede ser "none" para desactivar el código.
+    code-length: 4                  # Longitud exacta requerida para el código. Universal: el login verifica la contraseña y el código según lo registrado.
   login:
-    first-requirement: <password>
-    second-requirement: none
+    first-requirement: <password>   # Campo obligatorio para el login, siempre debe ser la contraseña del jugador.
+    second-requirement: <code>      # Campo adicional, debe coincidir con el código registrado.
 
 # ========================================
-#         CONFIGURACIÓN DE SEGURIDAD
+#   CONFIGURACIÓN DE SEGURIDAD
 # ========================================
 # Protección contra ataques de fuerza bruta y bots.
-
+# enabled: Activa/desactiva la protección antibot.
+# max-attempts: Número máximo de intentos fallidos antes de bloquear al usuario.
+# block-seconds: Tiempo (en segundos) que el usuario queda bloqueado tras exceder los intentos.
 security:
   antibot:
-    enabled: true
-    max-attempts: 5
-    block-seconds: 30
+    enabled: true         # true para activar protección antibot, false para desactivar.
+    max-attempts: 5       # Número máximo de intentos fallidos permitidos antes de bloquear.
+    block-seconds: 30     # Segundos que el usuario queda bloqueado tras exceder los intentos.
 
 # ========================================
-#      CONFIGURACIÓN DE EXPERIENCIA VISUAL
+#   CONFIGURACIÓN DE EXPERIENCIA VISUAL
 # ========================================
 # Ajusta los temporizadores y contadores visuales para el jugador.
-
+# max-wait-login: Tiempo máximo (en segundos) que un jugador tiene para iniciar sesión antes de ser expulsado.
+# max-wait-register: Tiempo máximo (en segundos) que un jugador tiene para registrarse antes de ser expulsado.
 visual-experience:
-  # Tiempo máximo (en segundos) que un jugador tiene para iniciar sesión.
-  max-wait-login: 30
-  
-  # Tiempo máximo (en segundos) que un jugador tiene para registrarse.
-  max-wait-register: 45
-  
-  # ¿A partir de cuántos segundos restantes se debe mostrar el contador en el título?
-  title-countdown-start: 10
+  max-wait-login: 30      # Segundos para iniciar sesión antes de ser expulsado.
+  max-wait-register: 45   # Segundos para registrarse antes de ser expulsado.
 
 # ========================================
-#        CONFIGURACIÓN DEL MUNDO
+#   CONFIGURACIÓN DEL MUNDO
 # ========================================
 # Define el punto de aparición para los jugadores que aún no han iniciado sesión.
-
+# world: Nombre del mundo donde aparecerán los jugadores.
+# x, y, z: Coordenadas de aparición.
+# yaw, pitch: Orientación inicial del jugador.
 spawn-location:
-  world: "world_spawn"
-  x: 0.0
-  y: 64.0
-  z: 0.0
-  yaw: 0.0
-  pitch: 0.0
+  world: "world_spawn"   # Nombre del mundo de aparición.
+  x: 0.0                 # Coordenada X.
+  y: 64.0                # Coordenada Y.
+  z: 0.0                 # Coordenada Z.
+  yaw: 0.0               # Rotación horizontal.
+  pitch: 0.0             # Rotación vertical.

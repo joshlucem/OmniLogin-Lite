@@ -1,83 +1,91 @@
+register-password-too-short: "<red>La <bold>contraseña</bold> es demasiado corta. Usa al menos <yellow>{min}</yellow> caracteres.</red>"
+register-password-too-long: "<red>La <bold>contraseña</bold> es demasiado larga. Usa menos de <yellow>{max}</yellow> caracteres.</red>"
+register-password-too-medium: "<red>La <bold>contraseña</bold> debe tener <yellow>letras</yellow> y <yellow>números</yellow>, y al menos <yellow>{min}</yellow> caracteres.</red>"
+register-password-too-hard: "<red>La <bold>contraseña</bold> debe tener <yellow>letras</yellow>, <yellow>números</yellow> y <yellow>símbolos</yellow>, y al menos <yellow>{min}</yellow> caracteres.</red>"
+register-password-too-simple: "<red>La <bold>contraseña</bold> debe tener <yellow>letras</yellow> y <yellow>números</yellow>, y al menos <yellow>{min}</yellow> caracteres.</red>"
+# ========================================
+#     MENSAJES DE RECORDATORIO ESPECÍFICO
+# ========================================
+reminder-login: "<gradient:#00c3ff:#ffff1c>¡Hola! <bold>🙋‍♂️</bold> Ingresa tu <bold>contraseña</bold> y <bold>código</bold> para comenzar tu aventura. Usa <green>/login</green>.</gradient>"
+reminder-register: "<gradient:#00c3ff:#ffff1c>¡Bienvenido! <bold>📝</bold> Regístrate con una <bold>contraseña segura</bold> y tu <bold>código</bold> de <yellow>{length}</yellow> dígitos. Usa <green>/register</green>.</gradient>"
+
+# ========================================
+#     MENSAJES DE VALIDACIÓN DE CÓDIGO
+# ========================================
+code-not-numeric: "<red>El <bold>código</bold> solo puede contener <yellow>dígitos numéricos</yellow>.</red>"
+code-invalid-length: "<red>El <bold>código</bold> debe tener exactamente <yellow>{length}</yellow> dígitos.</red>"
+
 # ========================================
 #         MENSAJES GENERALES
 # ========================================
-need-login: "§c¡Atención! Debes registrarte o iniciar sesión para poder jugar."
-reminder-register-message: "§eRecuerda: debes registrarte para poder jugar. Usa §6/register§e."
-reminder-login-message: "§eRecuerda: debes iniciar sesión para poder jugar. Usa §6/login§e."
-kick-message: "§cSe agotó el tiempo de espera. Regístrate o inicia sesión para poder jugar."
-error-too-many-attempts: "§cDemasiados intentos fallidos. Espera unos segundos antes de intentar de nuevo."
-error-bot-detected: "§cAcceso bloqueado por protección antibot. Si eres humano, contacta a un administrador."
-login-player-only: "§cSolo los jugadores pueden usar este comando."
-register-player-only: "§cSolo los jugadores pueden usar este comando."
+kick-message: "<red><bold>⏰ Tiempo agotado.</bold> Por favor <yellow>regístrate</yellow> o <yellow>inicia sesión</yellow> para seguir jugando. <italic>¡Te esperamos!</italic></red>"
+session-expired: "<red><bold>🔒 Tu sesión ha expirado.</bold> Ingresa nuevamente para continuar.</red>"
+login-player-only: "<red>Solo los jugadores pueden usar este comando.</red>"
+register-player-only: "<red>Solo los jugadores pueden usar este comando.</red>"
+error-too-many-attempts: "<red>Demasiados intentos fallidos. Espera unos segundos antes de intentar de nuevo.</red>"
+error-bot-detected: "<red>Acceso bloqueado por protección antibot. Si eres humano, contacta a un administrador.</red>"
+error-unknown: "<red>Ha ocurrido un error desconocido. Contacta a un administrador.</red>"
 
 # ========================================
 #     MENSAJES DE AUTENTICACIÓN
 # ========================================
-# Mensajes de Registro
-register-success: "§a¡Registro exitoso! Ya puedes jugar libremente."
-register-fail: "§cEl usuario ya existe. Elige otro nombre o inicia sesión."
-already-registered: "§eYa estás registrado. Si quieres entrar, usa §6/login§e."
-
-# Mensajes de Inicio de Sesión
-login-success: "§a¡Bienvenido! Has iniciado sesión correctamente."
-login-fail: "§cUsuario o contraseña incorrectos. Por favor verifica tus datos."
-already-logged-in: "§eYa has iniciado sesión. ¡Disfruta del juego!"
+register-fail: "<red>El usuario ya existe. Elige otro nombre o inicia sesión.</red>"
+register-success-welcome: "<green><bold>🎉 ¡Bienvenido, {user}!</bold> Tu registro fue exitoso. <italic>¡Disfruta el juego!</italic></green>"
+register-success-instructions: "<green><bold>✅ ¡Listo!</bold> Guarda tu <bold>contraseña</bold> y tu <yellow>código</yellow> (<yellow>{length}</yellow> dígitos). Para entrar de nuevo, usa <green>/login</green>.</green>"
+already-registered: "<yellow>Ya estás registrado.</yellow> Si quieres entrar, usa <green>/login</green>."
+login-fail: "<red>Usuario o contraseña incorrectos. Por favor verifica tus datos.</red>"
+login-success-welcome: "<green><bold>🚀 ¡Hola, {user}!</bold> Has iniciado sesión. <italic>¡A jugar!</italic></green>"
+already-logged-in: "<yellow>Ya has iniciado sesión. ¡Disfruta del juego!</yellow>"
+login-reminder: "<yellow>Recuerda iniciar sesión usando <green>/login</green>.</yellow>"
 
 # ========================================
 #        MENSAJES DE AYUDA
 # ========================================
-help-register: "§ePara registrarte usa: /register {first-requirement} {second-requirement}"
-help-login: "§ePara entrar usa: /login {first-requirement} {second-requirement}"
+help-register: "<aqua>📝 Regístrate: <green>/register</green> {first-requirement} {second-requirement} (<yellow>El código debe tener {length} dígitos</yellow>)</aqua>"
+help-login: "<aqua>🔑 Ingresa: <green>/login</green> {first-requirement} {second-requirement} (<yellow>Usa el mismo código que registraste</yellow>)</aqua>"
 help-admin: |
-  §eComandos de administrador disponibles:
-  §6/ologinl setworldspawn §7- Establece el punto de aparición para nuevos jugadores.
-  §6/ologinl listusers §7- Muestra una lista de todos los usuarios registrados.
-  §6/ologinl deleteuser <usuario> §7- Elimina la cuenta de un usuario.
-  §6/ologinl info §7- Muestra información detallada sobre el plugin.
-  §6/ologinl update §7- Comprueba si hay nuevas versiones disponibles.
-  §6/ologinl help §7- Muestra este menú de ayuda.
+  <aqua><bold>Comandos de administrador disponibles:</bold></aqua>
+  <green>/ologinl setworldspawn</green> <gray>- Establece el punto de aparición para nuevos jugadores.</gray>
+  <green>/ologinl listusers</green> <gray>- Muestra una lista de todos los usuarios registrados.</gray>
+  <green>/ologinl deleteuser <usuario></green> <gray>- Elimina la cuenta de un usuario.</gray>
+  <green>/ologinl info</green> <gray>- Muestra información detallada sobre el plugin.</gray>
+  <green>/ologinl update</green> <gray>- Comprueba si hay nuevas versiones disponibles.</gray>
+  <green>/ologinl help</green> <gray>- Muestra este menú de ayuda.</gray>
 
 # ========================================
 #      MENSAJES DE ADMINISTRACIÓN
 # ========================================
-admin-no-permission: "§cNo tienes permisos para ejecutar este comando."
-admin-player-only: "§cEste comando solo puede ser ejecutado por un jugador."
-admin-unknown-subcommand: "§eSubcomando desconocido. Usa §6/ologinl help§e para ver la lista de comandos."
+admin-tab-setworldspawn: "setworldspawn"
+admin-tab-listusers: "listusers"
+admin-tab-deleteuser: "deleteuser"
+admin-tab-info: "info"
+admin-tab-update: "update"
+admin-tab-help: "help"
+admin-no-permission: "<red>No tienes permisos para ejecutar este comando.</red>"
+admin-player-only: "<red>Este comando solo puede ser ejecutado por un jugador.</red>"
+admin-unknown-subcommand: "<yellow>Subcomando desconocido.</yellow> Usa <green>/ologinl help</green> para ver la lista de comandos."
+admin-action-success: "<green>Acción de administrador realizada correctamente.</green>"
+admin-action-fail: "<red>No se pudo completar la acción de administrador.</red>"
 
 # Subcomando: setworldspawn
-admin-setworldspawn-success: "§aEl punto de aparición del mundo ha sido configurado en tu ubicación actual."
+admin-setworldspawn-success: "<green>El punto de aparición del mundo ha sido configurado en tu ubicación actual.</green>"
 
 # Subcomando: listusers
-admin-listusers-title: "§eUsuarios registrados:"
-admin-listusers-entry: "§7- {user}"
+admin-listusers-title: "<yellow><bold>Usuarios registrados:</bold></yellow>"
+admin-listusers-entry: "<gray>- {user}</gray>"
 
 # Subcomando: deleteuser
-admin-deleteuser-usage: "§eUso correcto: /ologinl deleteuser <nombre_de_usuario>"
-admin-deleteuser-success: "§aEl usuario §6{user}§a ha sido eliminado correctamente."
-admin-deleteuser-fail: "§cNo se pudo encontrar al usuario §6{user}§c."
+admin-deleteuser-usage: "<yellow>Uso correcto:</yellow> <green>/ologinl deleteuser <nombre_de_usuario></green>"
+admin-deleteuser-success: "<green>El usuario <yellow>{user}</yellow> ha sido eliminado correctamente.</green>"
+admin-deleteuser-fail: "<red>No se pudo encontrar al usuario <yellow>{user}</yellow>.</red>"
 
 # Subcomando: update
-admin-update-none: "§aNo hay actualizaciones pendientes. Estás usando la versión más reciente: §b{version}§a."
-admin-update-new: "§e¡Nueva versión disponible! Versión actual: §b{version}§e, Nueva versión: §b{latest_version}§e."
+admin-update-none: "<green>No hay actualizaciones pendientes.</green> Estás usando la versión más reciente: <aqua>{version}</aqua>."
+admin-update-new: "<yellow>¡Nueva versión disponible!</yellow> Versión actual: <aqua>{version}</aqua>, Nueva versión: <aqua>{latest_version}</aqua>."
 
 # ========================================
 #   TRADUCCIÓN DE REQUERIMIENTOS
 # ========================================
-requirement-user: "Usuario"
 requirement-password: "Contraseña"
-requirement-repeatpassword: "Repetir-Contraseña"
 requirement-code: "Código"
 requirement-none: ""
-
-# ========================================
-#     CONTADORES VISUALES (TÍTULOS)
-# ========================================
-# Contador para el registro
-counter-register:
-  title: "§bRegistro: {time}s"
-  subtitle: "Usa /register para crear tu cuenta"
-
-# Contador para el inicio de sesión
-counter-login:
-  title: "§bLogin: {time}s"
-  subtitle: "Usa /login para entrar"
