@@ -31,6 +31,12 @@
 
 ---
 
+## Download
+
+- [Latest Release](https://github.com/JoshLucem/OmniLogin-Lite/releases/latest)
+
+---
+
 ## FAQ
 - For common questions, see [FAQ.md](wiki/FAQ.md)
 
