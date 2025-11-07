@@ -1,0 +1,8 @@
+# Archivos sensibles y generados
+target/
+*.log
+pom.xml
+src/main/resources/plugin.yml
+# Otros archivos temporales
+*.tmp
+*.bak

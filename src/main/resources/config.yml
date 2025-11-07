@@ -1,0 +1,56 @@
+# ========================================
+#       CONFIGURACIÓN DE AUTENTICACIÓN
+# ========================================
+# Define los campos requeridos para el registro y el inicio de sesión.
+# Variables disponibles: <user>, <password>, <repeatpassword>, <code>.
+# Usa "none" para deshabilitar un campo. Solo se permiten dos campos.
+
+authentication:
+  # Método de registro
+  register:
+    first-requirement: <password>
+    second-requirement: <code>
+
+  # Método de inicio de sesión
+  login:
+    first-requirement: <password>
+    second-requirement: none
+
+# ========================================
+#         CONFIGURACIÓN DE SEGURIDAD
+# ========================================
+# Protección contra ataques de fuerza bruta y bots.
+
+security:
+  antibot:
+    enabled: true
+    max-attempts: 5
+    block-seconds: 30
+
+# ========================================
+#      CONFIGURACIÓN DE EXPERIENCIA VISUAL
+# ========================================
+# Ajusta los temporizadores y contadores visuales para el jugador.
+
+visual-experience:
+  # Tiempo máximo (en segundos) que un jugador tiene para iniciar sesión.
+  max-wait-login: 30
+  
+  # Tiempo máximo (en segundos) que un jugador tiene para registrarse.
+  max-wait-register: 45
+  
+  # ¿A partir de cuántos segundos restantes se debe mostrar el contador en el título?
+  title-countdown-start: 10
+
+# ========================================
+#        CONFIGURACIÓN DEL MUNDO
+# ========================================
+# Define el punto de aparición para los jugadores que aún no han iniciado sesión.
+
+spawn-location:
+  world: "world_spawn"
+  x: 0.0
+  y: 64.0
+  z: 0.0
+  yaw: 0.0
+  pitch: 0.0

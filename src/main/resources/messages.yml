@@ -1,0 +1,83 @@
+# ========================================
+#         MENSAJES GENERALES
+# ========================================
+need-login: "§c¡Atención! Debes registrarte o iniciar sesión para poder jugar."
+reminder-register-message: "§eRecuerda: debes registrarte para poder jugar. Usa §6/register§e."
+reminder-login-message: "§eRecuerda: debes iniciar sesión para poder jugar. Usa §6/login§e."
+kick-message: "§cSe agotó el tiempo de espera. Regístrate o inicia sesión para poder jugar."
+error-too-many-attempts: "§cDemasiados intentos fallidos. Espera unos segundos antes de intentar de nuevo."
+error-bot-detected: "§cAcceso bloqueado por protección antibot. Si eres humano, contacta a un administrador."
+login-player-only: "§cSolo los jugadores pueden usar este comando."
+register-player-only: "§cSolo los jugadores pueden usar este comando."
+
+# ========================================
+#     MENSAJES DE AUTENTICACIÓN
+# ========================================
+# Mensajes de Registro
+register-success: "§a¡Registro exitoso! Ya puedes jugar libremente."
+register-fail: "§cEl usuario ya existe. Elige otro nombre o inicia sesión."
+already-registered: "§eYa estás registrado. Si quieres entrar, usa §6/login§e."
+
+# Mensajes de Inicio de Sesión
+login-success: "§a¡Bienvenido! Has iniciado sesión correctamente."
+login-fail: "§cUsuario o contraseña incorrectos. Por favor verifica tus datos."
+already-logged-in: "§eYa has iniciado sesión. ¡Disfruta del juego!"
+
+# ========================================
+#        MENSAJES DE AYUDA
+# ========================================
+help-register: "§ePara registrarte usa: /register {first-requirement} {second-requirement}"
+help-login: "§ePara entrar usa: /login {first-requirement} {second-requirement}"
+help-admin: |
+  §eComandos de administrador disponibles:
+  §6/ologinl setworldspawn §7- Establece el punto de aparición para nuevos jugadores.
+  §6/ologinl listusers §7- Muestra una lista de todos los usuarios registrados.
+  §6/ologinl deleteuser <usuario> §7- Elimina la cuenta de un usuario.
+  §6/ologinl info §7- Muestra información detallada sobre el plugin.
+  §6/ologinl update §7- Comprueba si hay nuevas versiones disponibles.
+  §6/ologinl help §7- Muestra este menú de ayuda.
+
+# ========================================
+#      MENSAJES DE ADMINISTRACIÓN
+# ========================================
+admin-no-permission: "§cNo tienes permisos para ejecutar este comando."
+admin-player-only: "§cEste comando solo puede ser ejecutado por un jugador."
+admin-unknown-subcommand: "§eSubcomando desconocido. Usa §6/ologinl help§e para ver la lista de comandos."
+
+# Subcomando: setworldspawn
+admin-setworldspawn-success: "§aEl punto de aparición del mundo ha sido configurado en tu ubicación actual."
+
+# Subcomando: listusers
+admin-listusers-title: "§eUsuarios registrados:"
+admin-listusers-entry: "§7- {user}"
+
+# Subcomando: deleteuser
+admin-deleteuser-usage: "§eUso correcto: /ologinl deleteuser <nombre_de_usuario>"
+admin-deleteuser-success: "§aEl usuario §6{user}§a ha sido eliminado correctamente."
+admin-deleteuser-fail: "§cNo se pudo encontrar al usuario §6{user}§c."
+
+# Subcomando: update
+admin-update-none: "§aNo hay actualizaciones pendientes. Estás usando la versión más reciente: §b{version}§a."
+admin-update-new: "§e¡Nueva versión disponible! Versión actual: §b{version}§e, Nueva versión: §b{latest_version}§e."
+
+# ========================================
+#   TRADUCCIÓN DE REQUERIMIENTOS
+# ========================================
+requirement-user: "Usuario"
+requirement-password: "Contraseña"
+requirement-repeatpassword: "Repetir-Contraseña"
+requirement-code: "Código"
+requirement-none: ""
+
+# ========================================
+#     CONTADORES VISUALES (TÍTULOS)
+# ========================================
+# Contador para el registro
+counter-register:
+  title: "§bRegistro: {time}s"
+  subtitle: "Usa /register para crear tu cuenta"
+
+# Contador para el inicio de sesión
+counter-login:
+  title: "§bLogin: {time}s"
+  subtitle: "Usa /login para entrar"
